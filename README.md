@@ -17,4 +17,9 @@ Hence the conversion of (102421)<sub>5</sub> to base 32 is successful as shown i
      - Base would be limited to 36, if operated using my direct algorithm
      - Base would be limited to user digit space if using the [baseconv.py](https://github.com/semente/python-baseconv/blob/master/baseconv.py) algorithm, of first converting to an int
   - [ ] Write a PyPi package for this repo, so users can utilise it more easily
-  - [ ] Integrate a *TUI*, or implement my own, using **ANSI** sequences to provide a better interface with the package itself
+  - [ ] Integrate a *TUI*, or implement my own, using **ANSI** sequences to provide a better interface as part of the package itself
+  - [ ] Include working examples in a separate file, which imports the package, utilising, both direct, and decimal algorithm
+  
+### EXAMPLES
+  
+  A working example is provided in the script, which runs if the module name (__\_\_name\_\___) is __\_\_main\_\___ .
