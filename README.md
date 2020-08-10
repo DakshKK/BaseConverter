@@ -6,7 +6,10 @@ This program was meant to reverse the process of converting ints from Bases 2 to
 
 Hence the conversion of (102421)<sub>5</sub> to base 32 is successful as shown in the provided screenshot.
 
-![](screenshot/output.png?raw=true)
+<ul>
+  
+![](output.png?raw=true)
+</ul>
 
 ### TODO
   - [ ] Implement a system to let user enter their own system of digits, and accordinlgy convert inspired by [python-baseconv](https://github.com/semente/python-baseconv)
