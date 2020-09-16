@@ -22,19 +22,9 @@ else:
         time.sleep(2)
         sys.exit('\x1b[?1049l\x1b[0m\n')
 
-try:
-    number = input('\x1b[4HEnter the number to convert:\x1b[4;42H')
-    number = number.upper()
-    if converter.validate(number, fromBase):
-        pass
-    else:
-        raise ValueError
-except ValueError:
-    print(f'\x1b[6H\x1b[1mInvalid literal {number} entered for base {fromBase}\x1b[22m')
-except:   
-    print(f'\x1b[6H\x1b[1mInvalid number entered for base {fromBase}\x1b[22m')
-else:
-    print(f'Converted number is:\x1b[5;42H{converter.convert(number, fromBase, toBase)}')
+number = input('\x1b[4HEnter the number to convert:\x1b[4;42H')
+number = number.upper()
+print(f'Converted number is:\x1b[5;42H{converter.convert(number, fromBase, toBase)}')
 
 try:
     time.sleep(10)
