@@ -12,13 +12,13 @@ Hence the conversion of (102421)<sub>5</sub> to base 32 is successful as shown i
 </ul>
 
 ### TODO
-  - [ ] Implement a system to let user enter their own system of digits, and accordinlgy convert inspired by [python-baseconv](https://github.com/semente/python-baseconv)
+  - [x] Implement a system to let user enter their own system of digits, and accordinlgy convert inspired by [python-baseconv](https://github.com/semente/python-baseconv)
      ##### Issues
      - Base would be limited to 36, if operated using my direct algorithm
      - Base would be limited to user digit space if using the [baseconv.py](https://github.com/semente/python-baseconv/blob/master/baseconv.py) algorithm, of first converting to an int
   - [ ] Write a PyPi package for this repo, so users can utilise it more easily
   - [ ] Integrate a *TUI*, or implement my own, using **ANSI** sequences to provide a better interface as part of the package itself
-  - [ ] Include working examples in a separate file, which imports the package, utilising, both direct, and decimal algorithm
+  - [x] Include working examples in a separate file, which imports the package, utilising, both direct, and decimal algorithm
   
 ### EXAMPLES
   
