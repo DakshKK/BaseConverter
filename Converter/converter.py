@@ -1,4 +1,5 @@
-digits='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+sign = '-'
 
 def convert(number, fromBase, toBase):
     if not validate(number, fromBase):
