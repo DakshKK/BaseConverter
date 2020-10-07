@@ -1,44 +1,53 @@
-digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+digit = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 sign = '-'
 
-def convert(number, fromBase, toBase):
-    if not validate(number, fromBase):
-        raise ValueError(f'\x1b[6H\x1b[1mInvalid digits found in given number for base {fromBase}.\x1b[22m')
-
-    if number[0] == '-':
-        neg = True
-        number = number[1:]
+def converter(number, fromBase, toBase):
+    if number[0] == sign:
+        neg, number = True, number[1:]
     else:
         neg = False
 
     number = number.lstrip('0')
-
     res = []
-    if number:
-        for digit in number:
-            res.append(digit)
-            for pos in range(-2, -(len(res) + 1), -1):
-                q, r = divmod(digits.index(res[pos]) * fromBase + digits.index(res[pos + 1]), toBase)
-                res[pos], res[pos + 1] = digits[q], digits[r]
 
-            baseValue = digits.index(res[0])
+    if number:
+        for val in number:
+            res.append(val)
+            for i in range(-2, -(len(res) + 1), -1):
+                q, r = divmod(digit.index(res[i]) * fromBase + digit.index(res[i + 1]), toBase)
+                res[i], res[i + 1] = digit[q], digit[r]
+
+            baseValue = digit.index(res[0])
             while baseValue >= toBase:
                 q, r = divmod(baseValue, toBase)
-                res[0] = digits[r]
+                res[0] = digit[r]
                 baseValue = q
-                res.insert(0, digits[baseValue])
+                res.insert(0, digit[baseValue])
             del baseValue
 
         if neg:
-            res.insert(0, '-')
+            res.insert(0, sign)
 
         return ''.join(res).lstrip('0')
     else:
         return '0'
 
-def validate(number, fromBase):
-    num = number
-    if number[0] == '-':
-        num = number[1:]
+def transform(number, fromDigit, toDigit, fromSign, toSign):
+    if number[0] == fromSign:
+        neg, number = True, number[1:]
+    else:
+        neg = False
 
-    return all(sub in digits[:fromBase] for sub in num)
+    number = [toDigit[fromDigit.index(n)] for n in number]
+
+    if neg:
+        number.insert(0, toSign)
+
+    return ''.join(number)
+
+def convert(number, fromBase, toBase, data):
+    number = transform(number, data['fromDigit'], digit, data['fromSign'], sign)
+    number = converter(number, fromBase, toBase)
+    number = transform(number, digit, data['toDigit'], data['fromSign'], data['toSign'])
+
+    return number
