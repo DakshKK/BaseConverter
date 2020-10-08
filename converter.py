@@ -5,18 +5,18 @@ Before conversion, first change your from and to base either using one of the me
 or passing a custom one to convert.
 """
 
-sysDigit = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-sysSign = '-'
+digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+negsym = '-'
 
-fro = {
-        'digit': sysDigit,
-        'sign': sysSign,
+f = {
+        'digit': digits,
+        'sign': negsym,
         'base': 36
         }
 
-to = {
-        'digit': sysDigit,
-        'sign': sysSign,
+t = {
+        'digit': digits,
+        'sign': negsym,
         'base': 36
         }
 
@@ -24,27 +24,27 @@ def modifyFro(froBase):
     '''
     Input argument is the base length.
     For fro
-      - Digit gets modified to sysDigit[:froBase]
+      - Digit gets modified to digits[:froBase]
       - Sign becomes default sign '-'
       - Base becomes input provided
     '''
 
-    fro['digit'] = sysDigit[:froBase]
-    fro['sign'] = sysSign
-    fro['base'] = froBase
+    f['digit'] = digits[:froBase]
+    f['sign'] = negsym
+    f['base'] = froBase
 
 def modifyTo(toBase):
     '''
     Input argument is the base length.
     For to
-      - Digit gets modified to sysDigit[:toBase]
+      - Digit gets modified to digits[:toBase]
       - Sign becomes default sign '-'
       - Base becomes input provided
     '''
 
-    to['digit'] = sysDigit[:toBase]
-    to['sign'] = sysSign
-    to['base'] = toBase
+    t['digit'] = digits[:toBase]
+    t['sign'] = negsym
+    t['base'] = toBase
 
 def modifyDef(froBase, toBase):
     '''
@@ -55,7 +55,7 @@ def modifyDef(froBase, toBase):
     modifyFro(froBase)
     modifyTo(toBase)
 
-def customFro(digit = sysDigit, sign = sysSign):
+def customFro(digit = digits, sign = negsym):
     '''
     Input arguments are digit space, and sign
     For fro
@@ -64,11 +64,11 @@ def customFro(digit = sysDigit, sign = sysSign):
       - Base becomes len of digit
     '''
 
-    fro['digit'] = str(digit)
-    fro['sign'] = str(sign)
-    fro['base'] = len(fro['digit'])
+    f['digit'] = str(digit)
+    f['sign'] = str(sign)
+    f['base'] = len(f['digit'])
 
-def customTo(digit = sysDigit, sign = sysSign):
+def customTo(digit = digits, sign = negsym):
     '''
     Input arguments are digit space, and sign
     For to
@@ -77,11 +77,11 @@ def customTo(digit = sysDigit, sign = sysSign):
       - Base becomes len of digit
     '''
 
-    to['digit'] = str(digit)
-    to['sign'] = str(sign)
-    to['base'] = len(to['digit'])
+    t['digit'] = str(digit)
+    t['sign'] = str(sign)
+    t['base'] = len(t['digit'])
 
-def customDef(froDigit = sysDigit, froSign = sysSign, toDigit = sysDigit, toSign = sysSign):
+def customDef(froDigit = digits, froSign = negsym, toDigit = digits, toSign = negsym):
     '''
     Input arguments are digit space, and sign for both fro and to
     Calls customFro, and customTo, with respective arguments
@@ -90,89 +90,88 @@ def customDef(froDigit = sysDigit, froSign = sysSign, toDigit = sysDigit, toSign
     customFro(froDigit, froSign)
     customTo(toDigit, toSign)
 
-def converter(number, fBase, tBase):
+def converter(number, digit, sign):
     '''
     Implements the algorithm to convert between two bases.
     '''
 
-    if number[0] == sysSign:
+    if number[0] == sign:
         neg, number = True, number[1:]
     else:
         neg = False
 
-    number = number.lstrip('0')
+    number = number.lstrip(digit[0])
     res = []
 
     if number:
         for val in number:
             res.append(val)
             for i in range(-2, -(len(res) + 1), -1):
-                q, r = divmod(sysDigit.index(res[i]) * fBase + sysDigit.index(res[i + 1]), tBase)
-                res[i], res[i + 1] = sysDigit[q], sysDigit[r]
+                q, r = divmod(digit.index(res[i]) * f['base']
+                        + digit.index(res[i + 1]), t['base'])
+                res[i], res[i + 1] = digit[q], digit[r]
 
-            base = sysDigit.index(res[0])
-            while base >= tBase:
-                q, r = divmod(base, tBase)
-                res[0], base = sysDigit[r], q
-                res.insert(0, sysDigit[base])
-            del base
+            base = digit.index(res[0])
+            while base >= t['base']:
+                q, r = divmod(base, t['base'])
+                res[0], base = digit[r], q
+                res.insert(0, digit[base])
 
-        res = list(''.join(res).lstrip('0'))
+        res = ''.join(res).lstrip(digit[0])
         if neg:
-            res.insert(0, sysSign)
-
-        return ''.join(res)
+            res = sign + res
     else:
-        return '0'
+        res = digit[0]
+    return res
 
-def transform(number, fDigit, tDigit, fSign, tSign):
+def transform(number):
     '''
     Transforms from user defined base to system defined base.
     '''
 
-    if number[0] == fSign:
+    if number[0] == f['sign']:
         neg, number = True, number[1:]
     else:
         neg = False
 
-    number = [tDigit[fDigit.index(n)] for n in number]
+    number = ''.join(
+            [t['digit'][f['digit'].index(n)] for n in number]
+            )
 
     if neg:
-        number.insert(0, tSign)
+        number = t['sign'] + number
+    return number
 
-    return ''.join(number)
-
-def validate(fro, to):
+def validate():
     '''
     Validates the input by checking if sign is in digit space, or digit space is unique or not.
     '''
 
-    if fro['sign'] in fro['digit'] or to['sign'] in to['digit']:
+    if f['sign'] in f['digit'] or t['sign'] in t['digit']:
         print('Sign found in digit.')
         return False
-    if len(fro['digit']) != len(set(fro['digit'])) or len(to['digit']) != len(set(to['digit'])):
+    if len(f['digit']) != len(set(f['digit'])) or len(t['digit']) != len(set(t['digit'])):
         print('Digit space is not unique.')
-        return False
-    if not (1 < fro['base'] < 37) or not (1 < to['base'] < 37):
-        print('Invalid base. Can not convert.')
         return False
     return True
 
-def convert(number, f = fro, t = to):
+def convert(number, fro = f, to = t):
     '''
     Validates user input, after which if valid, converts the number.
     '''
 
-    if f != fro:
-        customFro(**f)
-        f = fro
-    if t != to:
-        customTo(**t)
-        t = to
+    if fro != f:
+        customFro(**fro)
+        fro = f
+    if to != t:
+        customTo(**to)
+        to = t
 
-    if validate(f, t):
+    if validate():
         number = str(number)
-        number = transform(number, f['digit'], sysDigit, f['sign'], sysSign)
-        number = converter(number, f['base'], t['base'])
-        number = transform(number, sysDigit, t['digit'], sysSign, t['sign'])
+        if f['base'] >= t['base']:
+            number = converter(number, f['digit'], f['sign'])
+        number = transform(number)
+        if f['base'] < t['base']:
+            number = converter(number, t['digit'], t['sign'])
         return number
