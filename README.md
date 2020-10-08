@@ -1,31 +1,45 @@
 # BaseConverter
 
-BaseConverter is a calculator written to convert numbers betwewen arbitrary bases from `2` to `36`. It takes a direct approach of converting the number without first shifting to decimal base.
+  BaseConverter is a calculator written to convert numbers betwewen arbitrary bases. It takes a direct approach of converting the number without first shifting to decimal base.
 
-This program was meant to reverse the process of converting ints from Bases `2` to `36` to decimal using the int function, and to provide the user with means to convert it from say base `5` to base `32`, instead of only being able to convert to decimal base.
+## WHAT IT IS
+  Since Python's `int` function has the shortcoming of only converting to base `10`, this program was developed to let you convert to arbitrary bases, that `int` can convert from, i.e. `2` to `36`.
 
-Hence the conversion of `(102421)`<sub>`5`</sub> to base `32` is successful as shown in the provided screenshot.
+  This program also gives you the additional feature, to let you convert custom defined bases, to a system defined, or another custom defined one.
 
-<ul>
+  Hence the conversion of `(102421)`<sub>`5`</sub> to base `32` is successful as shown in the provided screenshot.
 
-![](output.png?raw=true)
-</ul>
+  &emsp;&emsp; ![](output.png?raw=true)
+
+  And also the conversion of `*BAD` with the from and to digit spaces, respecetively defined as
+```python3
+f = {
+    'digit': 'ABCDE',
+    'sign': '*'
+    } # Base is derived as len(digit)
+t = {
+    'digit': 'CD',
+    'sign': '+'
+    } # Base is derived as len(digit)
+```
+  is successful. And it transforms to `+DDDCC`.
+
 
 ### TODO
   - [x] Implement a system to let user enter their own system of digits, and accordingly convert inspired by [python-baseconv](https://github.com/semente/python-baseconv 'Base Converter, which uses decimal algorithm for conversion between bases.').
   - [ ] Write a PyPI package for this repo, so users can utilise it more easily, by doing a `pip install`.
-  - [ ] Include working examples in a separate file, which imports the package, utilising, both direct, and decimal algorithm.
-    - [x] Direct algorithm implementation complemeted.
-    - [ ] Decimal algorithm implementation complemeted.
+  - [x] Include working examples in a separate file, which imports the package, and tests it.
 
-#### Info
-  - User can now convert using their own digit space, but only till a maximum of base `36`. (Base is case-sensitive, hence `A` and `a` are not same).
-  - Base is defined as length of your digit space. Hence `'abcd1234'`, is Base `8`.
-  - **Repeated characters in base, or sign in digit-space, will lead to error**.
-  - Program will calculate the base on its own for your given custom base input.
+#### INFO
+  - User can now convert using their own digit space, of any base. (Base is defined as length of your digit space. Hence `'abcd1234'`, is Base `8`.).
+  - Base is case-sensitive, hence `A` and `a` are not same
+  - **Repeated characters in base, or sign in digit-space, will lead to error, just as it should.**
+  - Program will calculate the base on its own for your given custom base input. Hence you need only to enter, the digit-space, and/or the sign.
 
 ### EXAMPLES
-  A working example is provided in the `example.py` script, which runs if the module name (**\_\_name__**) is **\_\_main__**.
+  A working example is provided in the [`example.py`](example.py 'An example program.') script, which runs if the module name (**\_\_name__**) is **\_\_main__**.
+
+  To see a few working tests you can check the [`test.py`](test.py 'Tests for the program.') file.
 
 ### Install and Usage
   The repo can be directly cloned, and you can import the module in current directory.
@@ -55,6 +69,14 @@ Hence the conversion of `(102421)`<sub>`5`</sub> to base `32` is successful as s
 >>> converter.modifyDef(5, 32)
 >>> converter.convert('00141')
 '1E'
+>>>
+>>> converter.customDef('ABCDE', '*', 'CD', '+')
+>>> converter.convert('*BAD')
+'+DDDCC'
+>>> converter.customFro('😁😃')
+>>> converter.modifyTo(4)
+>>> converter.convert('-😁😃😃😁')
+'-12'
 ```
 
   To get a list of functions in the module run `dir(converter)`, or `help(converter)`.
