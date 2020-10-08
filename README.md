@@ -29,6 +29,8 @@ t = {
   - [x] Implement a system to let user enter their own system of digits, and accordingly convert inspired by [python-baseconv](https://github.com/semente/python-baseconv 'Base Converter, which uses decimal algorithm for conversion between bases.').
   - [ ] Write a PyPI package for this repo, so users can utilise it more easily, by doing a `pip install`.
   - [x] Include working examples in a separate file, which imports the package, and tests it.
+  - [ ] Implement floating point conversion.
+  - [ ] Implement `n`'s and `(n-1)`'s complement method of calculation.
 
 #### INFO
   - User can now convert using their own digit space, of any base. (Base is defined as length of your digit space. Hence `'abcd1234'`, is Base `8`.).
