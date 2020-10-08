@@ -12,7 +12,7 @@ Hence the conversion of `(102421)`<sub>`5`</sub> to base `32` is successful as s
 </ul>
 
 ### TODO
-  - [x] Implement a system to let user enter their own system of digits, and accordinlgy convert inspired by [python-baseconv](https://github.com/semente/python-baseconv 'Base Converter, which uses decimal algorithm for conversion between bases.').
+  - [x] Implement a system to let user enter their own system of digits, and accordingly convert inspired by [python-baseconv](https://github.com/semente/python-baseconv 'Base Converter, which uses decimal algorithm for conversion between bases.').
   - [ ] Write a PyPI package for this repo, so users can utilise it more easily, by doing a `pip install`.
   - [ ] Include working examples in a separate file, which imports the package, utilising, both direct, and decimal algorithm.
     - [x] Direct algorithm implementation complemeted.
@@ -22,6 +22,7 @@ Hence the conversion of `(102421)`<sub>`5`</sub> to base `32` is successful as s
   - User can now convert using their own digit space, but only till a maximum of base `36`. (Base is case-sensitive, hence `A` and `a` are not same).
   - Base is defined as length of your digit space. Hence `'abcd1234'`, is Base `8`.
   - **Repeated characters in base, or sign in digit-space, will lead to error**.
+  - Program will calculate the base on its own for your given custom base input.
 
 ### EXAMPLES
   A working example is provided in the `example.py` script, which runs if the module name (**\_\_name__**) is **\_\_main__**.
@@ -37,7 +38,6 @@ Hence the conversion of `(102421)`<sub>`5`</sub> to base `32` is successful as s
 >>> fro = {
 ... 'digit': '24',
 ... 'sign': '*',
-... 'base': 2, # Length of digit
 ... }
 >>> converter.convert('*244242', t = {'digit': 24681379}, f = fro)
 '+86'
