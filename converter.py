@@ -7,16 +7,19 @@ or passing a custom one to convert.
 
 digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 negsym = '-'
+sepr = '.'
 
 f = {
         'digit': digits,
         'sign': negsym,
+        'sep' : sepr,
         'base': 36
         }
 
 t = {
         'digit': digits,
         'sign': negsym,
+        'sep' : sepr,
         'base': 36
         }
 
@@ -31,6 +34,7 @@ def modifyFro(froBase):
 
     f['digit'] = digits[:froBase]
     f['sign'] = negsym
+    f['sep'] = sepr
     f['base'] = froBase
 
 def modifyTo(toBase):
@@ -44,6 +48,7 @@ def modifyTo(toBase):
 
     t['digit'] = digits[:toBase]
     t['sign'] = negsym
+    t['sep'] = sepr
     t['base'] = toBase
 
 def modifyDef(froBase, toBase):
@@ -55,7 +60,7 @@ def modifyDef(froBase, toBase):
     modifyFro(froBase)
     modifyTo(toBase)
 
-def customFro(digit = digits, sign = negsym):
+def customFro(digit = digits, sign = negsym, sep = sepr):
     '''
     Input arguments are digit space, and sign
     For fro
@@ -66,9 +71,10 @@ def customFro(digit = digits, sign = negsym):
 
     f['digit'] = str(digit)
     f['sign'] = str(sign)
+    f['sep'] = str(sep)
     f['base'] = len(f['digit'])
 
-def customTo(digit = digits, sign = negsym):
+def customTo(digit = digits, sign = negsym, sep = sepr):
     '''
     Input arguments are digit space, and sign
     For to
@@ -79,16 +85,18 @@ def customTo(digit = digits, sign = negsym):
 
     t['digit'] = str(digit)
     t['sign'] = str(sign)
+    t['sep'] = str(sep)
     t['base'] = len(t['digit'])
 
-def customDef(froDigit = digits, froSign = negsym, toDigit = digits, toSign = negsym):
+def customDef(froDigit = digits, froSign = negsym, froSep = sepr,
+        toDigit = digits, toSign = negsym, toSep = sepr):
     '''
     Input arguments are digit space, and sign for both fro and to
     Calls customFro, and customTo, with respective arguments
     '''
 
-    customFro(froDigit, froSign)
-    customTo(toDigit, toSign)
+    customFro(froDigit, froSign, froSep)
+    customTo(toDigit, toSign, toSep)
 
 def converter(number, digit, sign):
     '''
