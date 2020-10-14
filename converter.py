@@ -126,15 +126,53 @@ def converter(number, digit, sign):
                 res.insert(0, digit[base])
 
         res = ''.join(res).lstrip(digit[0])
-        if neg:
-            res = sign + res
+    else:
+        res = digit[0]
+
+    if neg:
+        res = sign + res
+    return res
+
+def fraction(number, digit, sign):
+    '''
+    Implements the algorithm to convert between fractional part of two bases.
+    '''
+
+    number.rstrip(digit[0])
+    res = []
+
+    if number:
+        for val in number[::-1]:
+            res.insert(0, val)
+            for i in range(len(res)):
+                q, r = divmod(digit.index(res[i]) * t['base'], f['base'])
+                res[i] = digit[q]
+                if i != (len(res) - 1):
+                    r += digit.index(res[i + 1])
+                if r >= f['base']:
+                    res[i] = digit[digit.index(res[i]) + (r // f['base'])]
+                    r %= f['base']
+                if i == (len(res) - 1):
+                    res.append(digit[r])
+                else:
+                    res[i + 1] = digit[r]
+
+        while digit.index(res[-1]) >= t['base'] or len(res) < 6:
+            q, r = divmod(digit.index(res[-1]) * t['base'], f['base'])
+            res[-1] = digit[q]
+            if r >= f['base']:
+                res[-1] = digit[digit.index(res[-1]) + (r // f['base'])]
+                r %= f['base']
+            res.append(digit[r])
+
+        res = ''.join(res).rstrip(digit[0])
     else:
         res = digit[0]
     return res
 
 def transform(number):
     '''
-    Transforms from user defined base to system defined base.
+    Transforms from f base to t base.
     '''
 
     if number[0] == f['sign']:
@@ -142,9 +180,17 @@ def transform(number):
     else:
         neg = False
 
-    number = ''.join(
-            [t['digit'][f['digit'].index(n)] for n in number]
-            )
+    pSep = number.find(f['sep'])
+    if pSep == -1:
+        number = ''.join(
+                [t['digit'][f['digit'].index(n)] for n in number]
+                )
+    else:
+        number = ''.join(
+                [t['digit'][f['digit'].index(n)] for n in number[:pSep]]
+                ) + t['sep'] + ''.join(
+                [t['digit'][f['digit'].index(n)] for n in number[pSep + 1:]]
+                )
 
     if neg:
         number = t['sign'] + number
@@ -155,11 +201,30 @@ def validate():
     Validates the input by checking if sign is in digit space, or digit space is unique or not.
     '''
 
+    if f['sep'] == f['sign'] or t['sep'] == t['sign']:
+        print('Separtor and sign symbols are the same.')
+        return False
     if f['sign'] in f['digit'] or t['sign'] in t['digit']:
         print('Sign found in digit.')
         return False
+    if f['sep'] in f['digit'] or t['sep'] in t['digit']:
+        print('Separator found in digit.')
+        return False
     if len(f['digit']) != len(set(f['digit'])) or len(t['digit']) != len(set(t['digit'])):
         print('Digit space is not unique.')
+        return False
+    return True
+
+def numberCheck(number):
+    if not all([n in f['digit'] for n in number if n not in f['sep'] + f['sign']]):
+        print('Invalid number entered.')
+        return False
+    if number.count(f['sep']) > 1:
+        print('Invalid number entered.')
+        return False
+    if number.count(f['sign']) > 1 or (number.count(f['sign']) == 1
+            and number[0] != f['sign']):
+        print('Invalid number entered.')
         return False
     return True
 
@@ -177,9 +242,26 @@ def convert(number, fro = f, to = t):
 
     if validate():
         number = str(number)
-        if f['base'] >= t['base']:
-            number = converter(number, f['digit'], f['sign'])
-        number = transform(number)
-        if f['base'] < t['base']:
-            number = converter(number, t['digit'], t['sign'])
-        return number
+        if numberCheck(number):
+            if f['base'] >= t['base']:
+                pSep = number.find(f['sep'])
+                if pSep == -1:
+                    number = converter(number, f['digit'], f['sign'])
+                else:
+                    num = number
+                    number = converter(num[:pSep], f['digit'], f['sign'])
+                    frac = fraction(num[pSep + 1:], f['digit'], f['sign'])
+                    if frac != f['digit'][0]:
+                        number += f['sep'] + frac
+            number = transform(number)
+            if f['base'] < t['base']:
+                pSep = number.find(f['sep'])
+                if pSep == -1:
+                    number = converter(number, t['digit'], t['sign'])
+                else:
+                    num = number
+                    number = converter(num[:pSep], t['digit'], t['sign'])
+                    frac = fraction(num[pSep + 1:], t['digit'], t['sign'])
+                    if frac != t['digit'][0]:
+                        number += t['sep'] + frac
+            return number
