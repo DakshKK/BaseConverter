@@ -43,6 +43,9 @@ t = {
 ### EXAMPLES
   To see a few working tests you can check the [`test.py`](test.py 'Tests for the program.') file.
 
+### EXPLANATION
+  To understand how the algorithm works, please check [`explanation.md`](explanation.md 'Explanation written for how the algorithm operates and calculates').
+
 ### Install and Usage
   The repo can be directly cloned, and you can import the module in current directory.
 
