@@ -121,8 +121,8 @@ def converter(number, digit, sign):
 
             base = digit.index(res[0])
             while base >= t['base']:
-                q, r = divmod(base, t['base'])
-                res[0], base = digit[r], q
+                base, r = divmod(base, t['base'])
+                res[0] = digit[r]
                 res.insert(0, digit[base])
 
         res = ''.join(res).lstrip(digit[0])
