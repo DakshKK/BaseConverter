@@ -138,7 +138,7 @@ def fraction(number, digit, sign):
     Implements the algorithm to convert between fractional part of two bases.
     '''
 
-    number.rstrip(digit[0])
+    number = number.rstrip(digit[0])
     res = []
 
     if number:
@@ -157,18 +157,17 @@ def fraction(number, digit, sign):
                 else:
                     res[i + 1] = digit[r]
 
-        while digit.index(res[-1]) >= t['base'] or len(res) < 6:
-            q, r = divmod(digit.index(res[-1]) * t['base'], f['base'])
-            res[-1] = digit[q]
-            if r >= f['base']:
-                res[-1] = digit[digit.index(res[-1]) + (r // f['base'])]
-                r %= f['base']
-            res.append(digit[r])
+            while digit.index(res[-1]) >= t['base'] or len(res) < 6:
+                q, r = divmod(digit.index(res[-1]) * t['base'], f['base'])
+                res[-1] = digit[q]
+                if r >= f['base']:
+                    res[-1] = digit[digit.index(res[-1]) + (r // f['base'])]
+                    r %= f['base']
+                res.append(digit[r])
 
-        res = ''.join(res).rstrip(digit[0])
+        return ''.join(res).rstrip(digit[0])
     else:
-        res = digit[0]
-    return res
+        return digit[0]
 
 def transform(number):
     '''
@@ -216,6 +215,9 @@ def validate():
     return True
 
 def numberCheck(number):
+    '''
+    Validates if the user has entered a valid number in the defined digit space
+    '''
     if not all([n in f['digit'] for n in number if n not in f['sep'] + f['sign']]):
         print('Invalid number entered.')
         return False
@@ -248,20 +250,16 @@ def convert(number, fro = f, to = t):
                 if pSep == -1:
                     number = converter(number, f['digit'], f['sign'])
                 else:
-                    num = number
-                    number = converter(num[:pSep], f['digit'], f['sign'])
-                    frac = fraction(num[pSep + 1:], f['digit'], f['sign'])
-                    if frac != f['digit'][0]:
-                        number += f['sep'] + frac
+                    number = converter(number[:pSep], f['digit'], f['sign']) \
+                            + f['sep'] + \
+                            fraction(number[pSep + 1:], f['digit'], f['sign'])
             number = transform(number)
             if f['base'] < t['base']:
-                pSep = number.find(f['sep'])
+                pSep = number.find(t['sep'])
                 if pSep == -1:
                     number = converter(number, t['digit'], t['sign'])
                 else:
-                    num = number
-                    number = converter(num[:pSep], t['digit'], t['sign'])
-                    frac = fraction(num[pSep + 1:], t['digit'], t['sign'])
-                    if frac != t['digit'][0]:
-                        number += t['sep'] + frac
+                    number = converter(num[:pSep], t['digit'], t['sign']) \
+                            + t['sep'] + \
+                            fraction(num[pSep + 1:], t['digit'], t['sign'])
             return number
