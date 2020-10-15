@@ -26,21 +26,21 @@ t = {
 
 
 ### TODO
-  - [x] Implement a system to let user enter their own system of digits, and accordingly convert inspired by [python-baseconv](https://github.com/semente/python-baseconv 'Base Converter, which uses decimal algorithm for conversion between bases.').
-  - [ ] Write a PyPI package for this repo, so users can utilise it more easily, by doing a `pip install`.
-  - [x] Include working examples in a separate file, which imports the package, and tests it.
-  - [ ] Implement floating point conversion.
-  - [ ] Implement `n`'s and `(n-1)`'s complement method of calculation.
+  - [x] Implement a system to let user enter their own system of digits, and accordingly convert inspired by [python-baseconv](https://github.com/semente/python-baseconv 'Base Converter, which uses decimal algorithm for conversion between bases.')
+  - [ ] Write a PyPI package for this repo, so users can utilise it more easily, by doing a `pip install`
+  - [x] Include working examples in a separate file, which imports the package, and tests it
+  - [x] Implement floating point conversion
+  - [ ] Let user specify precision of conversion wanted
+  - [ ] Implement `n`'s and `(n-1)`'s complement method of calculation
 
 #### INFO
   - User can now convert using their own digit space, of any base. (Base is defined as length of your digit space. Hence `'abcd1234'`, is Base `8`.).
   - Base is case-sensitive, hence `A` and `a` are not same
   - **Repeated characters in base, or sign in digit-space, will lead to error, just as it should.**
   - Program will calculate the base on its own for your given custom base input. Hence you need only to enter, the digit-space, and/or the sign.
+  - There is some loss in accuracy in conversion of floating points, as would be expected, hence the output if feeded back, may not give the exact input back.
 
 ### EXAMPLES
-  A working example is provided in the [`example.py`](example.py 'An example program.') script, which runs if the module name (**\_\_name__**) is **\_\_main__**.
-
   To see a few working tests you can check the [`test.py`](test.py 'Tests for the program.') file.
 
 ### Install and Usage
@@ -72,13 +72,23 @@ t = {
 >>> converter.convert('00141')
 '1E'
 >>>
->>> converter.customDef('ABCDE', '*', 'CD', '+')
->>> converter.convert('*BAD')
-'+DDDCC'
->>> converter.customFro('😁😃')
+>>> converter.customFro('😁😃', sep = '➗')
 >>> converter.modifyTo(4)
 >>> converter.convert('-😁😃😃😁')
 '-12'
+>>> converter.convert('-😁😃➗😁😃😃')
+'-1.12'
+>>> converter.convert('😁😃➗😃😁😃')
+'1.22'
+>>>
+>>> converter.modifyFro(4)
+>>> converter.customTo('😁😃', sep = '➗')
+>>> converter.convert(-1.3)
+'-😃➗😃😃'
+>>> converter.convert(-1.12)
+'-😃➗😁😃😃'
+>>> converter.convert(.123)
+'-😁➗😁😃😃😁😃😃'
 ```
 
   To get a list of functions in the module run `dir(converter)`, or `help(converter)`.
