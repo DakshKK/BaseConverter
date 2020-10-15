@@ -121,8 +121,8 @@ def converter(number, digit, sign):
 
             base = digit.index(res[0])
             while base >= t['base']:
-                q, r = divmod(base, t['base'])
-                res[0], base = digit[r], q
+                base, r = divmod(base, t['base'])
+                res[0] = digit[r]
                 res.insert(0, digit[base])
 
         res = ''.join(res).lstrip(digit[0])
@@ -157,13 +157,21 @@ def fraction(number, digit, sign):
                 else:
                     res[i + 1] = digit[r]
 
-            while digit.index(res[-1]) >= t['base'] or len(res) < 6:
+            while digit.index(res[-1]) >= t['base']:
                 q, r = divmod(digit.index(res[-1]) * t['base'], f['base'])
                 res[-1] = digit[q]
                 if r >= f['base']:
                     res[-1] = digit[digit.index(res[-1]) + (r // f['base'])]
                     r %= f['base']
                 res.append(digit[r])
+
+        while len(res) < 6:
+            q, r = divmod(digit.index(res[-1]) * t['base'], f['base'])
+            res[-1] = digit[q]
+            if r >= f['base']:
+                res[-1] = digit[digit.index(res[-1]) + (r // f['base'])]
+                r %= f['base']
+            res.append(digit[r])
 
         return ''.join(res).rstrip(digit[0])
     else:
@@ -259,7 +267,7 @@ def convert(number, fro = f, to = t):
                 if pSep == -1:
                     number = converter(number, t['digit'], t['sign'])
                 else:
-                    number = converter(num[:pSep], t['digit'], t['sign']) \
+                    number = converter(number[:pSep], t['digit'], t['sign']) \
                             + t['sep'] + \
-                            fraction(num[pSep + 1:], t['digit'], t['sign'])
+                            fraction(number[pSep + 1:], t['digit'], t['sign'])
             return number
