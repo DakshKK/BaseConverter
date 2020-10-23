@@ -1,66 +1,76 @@
 """Converter program to convert between bases.
 
-Given a number, it converts from a given fromBase/fromDigit, to a given toBase/toDigit.
+Given a number, it converts from a given fBase/fDigit, to a given tBase/tDigit.
 Before conversion, first change your from and to base either using one of the methods
 or passing a custom one to convert.
 """
 
-digits = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-negsym = '-'
-sepr = '.'
+sys = {
+        'digit': '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+        'sign': '-',
+        'sep': '.',
+        'prec': 6
+        }
 
 f = {
-        'digit': digits,
-        'sign': negsym,
-        'sep' : sepr,
+        'digit': sys['digit'],
+        'sign': sys['sign'],
+        'sep' : sys['sep'],
         'base': 36
         }
 
 t = {
-        'digit': digits,
-        'sign': negsym,
-        'sep' : sepr,
+        'digit': sys['digit'],
+        'sign': sys['sign'],
+        'sep' : sys['sep'],
         'base': 36
         }
 
-def modifyFro(froBase):
+def setPrec(pre = 6):
+    '''
+    A function to set the precision of floating point conversion
+    '''
+
+    sys['prec'] = pre
+
+def modifyF(fBase = 36):
     '''
     Input argument is the base length.
     For fro
-      - Digit gets modified to digits[:froBase]
+      - Digit gets modified to sys['digit'][:fBase]
       - Sign becomes default sign '-'
       - Base becomes input provided
     '''
 
-    f['digit'] = digits[:froBase]
-    f['sign'] = negsym
-    f['sep'] = sepr
-    f['base'] = froBase
+    f['digit'] = sys['digit'][:fBase]
+    f['sign'] = sys['sign']
+    f['sep'] = sys['sep']
+    f['base'] = fBase
 
-def modifyTo(toBase):
+def modifyT(tBase = 36):
     '''
     Input argument is the base length.
     For to
-      - Digit gets modified to digits[:toBase]
+      - Digit gets modified to sys['digit'][:tBase]
       - Sign becomes default sign '-'
       - Base becomes input provided
     '''
 
-    t['digit'] = digits[:toBase]
-    t['sign'] = negsym
-    t['sep'] = sepr
-    t['base'] = toBase
+    t['digit'] = sys['digit'][:tBase]
+    t['sign'] = sys['sign']
+    t['sep'] = sys['sep']
+    t['base'] = tBase
 
-def modifyDef(froBase, toBase):
+def modifyDef(fBase = 36, tBase = 36):
     '''
     Input argument is the fro and to Base length.
-    Calls both modifyFro and modifyTo
+    Calls both modifyF and modifyT
     '''
 
-    modifyFro(froBase)
-    modifyTo(toBase)
+    modifyF(fBase)
+    modifyT(tBase)
 
-def customFro(digit = digits, sign = negsym, sep = sepr):
+def customF(digit = sys['digit'], sign = sys['sign'], sep = sys['sep']):
     '''
     Input arguments are digit space, and sign
     For fro
@@ -74,7 +84,7 @@ def customFro(digit = digits, sign = negsym, sep = sepr):
     f['sep'] = str(sep)
     f['base'] = len(f['digit'])
 
-def customTo(digit = digits, sign = negsym, sep = sepr):
+def customT(digit = sys['digit'], sign = sys['sign'], sep = sys['sep']):
     '''
     Input arguments are digit space, and sign
     For to
@@ -88,15 +98,15 @@ def customTo(digit = digits, sign = negsym, sep = sepr):
     t['sep'] = str(sep)
     t['base'] = len(t['digit'])
 
-def customDef(froDigit = digits, froSign = negsym, froSep = sepr,
-        toDigit = digits, toSign = negsym, toSep = sepr):
+def customDef(fDigit = sys['digit'], fSign = sys['sign'], fSep = sys['sep'],
+        tDigit = sys['digit'], tSign = sys['sign'], tSep = sys['sep']):
     '''
     Input arguments are digit space, and sign for both fro and to
-    Calls customFro, and customTo, with respective arguments
+    Calls customF, and customT, with respective arguments
     '''
 
-    customFro(froDigit, froSign, froSep)
-    customTo(toDigit, toSign, toSep)
+    customF(fDigit, fSign, fSep)
+    customT(tDigit, tSign, tSep)
 
 def converter(number, digit, sign):
     '''
@@ -125,15 +135,14 @@ def converter(number, digit, sign):
                 res[0] = digit[r]
                 res.insert(0, digit[base])
 
-        res = ''.join(res).lstrip(digit[0])
-    else:
-        res = digit[0]
+    res = sign + (''.join(res).lstrip(digit[0]) or digit[0])
 
     if neg:
-        res = sign + res
-    return res
+        return res
+    else:
+        return res[1:]
 
-def fraction(number, digit, sign):
+def fraction(number, digit, sign, pre):
     '''
     Implements the algorithm to convert between fractional part of two bases.
     '''
@@ -172,10 +181,7 @@ def fraction(number, digit, sign):
                 res[-1] = digit[digit.index(res[-1]) + (r // f['base'])]
                 r %= f['base']
             res.append(digit[r])
-
-        return ''.join(res).rstrip(digit[0])
-    else:
-        return digit[0]
+    return ''.join(res).rstrip(digit[0])[:pre] or digit[0]
 
 def transform(number):
     '''
@@ -238,17 +244,15 @@ def numberCheck(number):
         return False
     return True
 
-def convert(number, fro = f, to = t):
+def convert(number, fro = f, to = t, pre = 0):
     '''
     Validates user input, after which if valid, converts the number.
     '''
 
     if fro != f:
-        customFro(**fro)
-        fro = f
+        customF(**fro)
     if to != t:
-        customTo(**to)
-        to = t
+        customT(**to)
 
     if validate():
         number = str(number)
@@ -260,7 +264,7 @@ def convert(number, fro = f, to = t):
                 else:
                     number = converter(number[:pSep], f['digit'], f['sign']) \
                             + f['sep'] + \
-                            fraction(number[pSep + 1:], f['digit'], f['sign'])
+                            fraction(number[pSep + 1:], f['digit'], f['sign'], pre or sys['prec'])
             number = transform(number)
             if f['base'] < t['base']:
                 pSep = number.find(t['sep'])
@@ -269,5 +273,5 @@ def convert(number, fro = f, to = t):
                 else:
                     number = converter(number[:pSep], t['digit'], t['sign']) \
                             + t['sep'] + \
-                            fraction(number[pSep + 1:], t['digit'], t['sign'])
+                            fraction(number[pSep + 1:], t['digit'], t['sign'], pre or sys['prec'])
             return number
