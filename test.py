@@ -10,8 +10,8 @@ assert(
         == ['/7', '1', '/0']
         ), 'Conversion was wrong'
 
-converter.modifyFro(5)
-converter.customTo(2468)
+converter.modifyF(5)
+converter.customT(2468)
 num = [24, 2, 10]
 assert(
         [converter.convert(n) for n in num] == ['86', '6', '44']
@@ -29,14 +29,14 @@ assert(
         [converter.convert(n) for n in num] == ['AB', '+A', '+AC', 'CDA']
         ), 'Conversion was wrong'
 
-converter.customFro('😁😃', sep = '➗')
-converter.modifyTo(4)
+converter.customF('😁😃', sep = '➗')
+converter.modifyT(4)
 num = ['-😁😃➗😁😃😃', '😁😃➗😃😁😃', '-😁😃😃😁']
 assert(
         [converter.convert(n) for n in num] == ['-1.12', '1.22', '-12']
         ), 'Conversion was wrong'
 
-converter.modifyFro(4)
+converter.modifyF(4)
 t = {
         'digit': '😁😃',
         'sign': '-',
@@ -45,5 +45,16 @@ t = {
 num = [-1.3, -1.2, 2.13, .333]
 assert(
         [converter.convert(n, to = t) for n in num]
+         == ['-😃➗😃😃', '-😃➗😃', '😃😁➗😁😃😃😃', '😁➗😃😃😃😃😃😃']
+        ), 'Conversion was wrong'
+
+converter.setPrec(3)
+assert(
+        [converter.convert(n, to = t) for n in num]
+         == ['-😃➗😃😃', '-😃➗😃', '😃😁➗😁😃😃', '😁➗😃😃😃']
+        ), 'Conversion was wrong'
+
+assert(
+        [converter.convert(n, to = t, pre = 6) for n in num]
          == ['-😃➗😃😃', '-😃➗😃', '😃😁➗😁😃😃😃', '😁➗😃😃😃😃😃😃']
         ), 'Conversion was wrong'
